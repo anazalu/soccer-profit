@@ -48,13 +48,6 @@ function MatchesContainer({ leagueId }: MatchesContainerProps) {
                             InputLabelProps={{ shrink: true }}
                         />
 
-                        <TextField
-                            id="outlined-basic" label="Steps to Freeroll" variant="outlined" size="small"
-                            // value={stepFreeRoll}
-                            // onChange={(e) => setStepFreeRoll(~~e.target.value)}                            
-                            InputLabelProps={{ shrink: true }}
-                        />
-
                         <Stack direction="row" >
                             <Button variant="contained" onClick={() => { setStake() }}>1</Button>
                             <Button variant="contained" onClick={() => { setStake() }}>2</Button>

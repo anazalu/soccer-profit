@@ -63,6 +63,16 @@ export default function MatchCard({ match }: MatchCardProps) {
                         />
                     </Grid>
 
+                    <Grid item xs={1}>
+
+                        <TextField
+                            id="outlined-basic" label="SFree" variant="outlined" size="small"
+                            // value={stepFreeRoll}
+                            // onChange={(e) => setStepFreeRoll(~~e.target.value)}                            
+                            InputLabelProps={{ shrink: true }}
+                        />
+                    </Grid>
+
                 </Grid>
             </Box>
         </Grid>

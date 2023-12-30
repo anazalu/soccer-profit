@@ -18,8 +18,9 @@ public class MatchController {
     }
 
     @PostMapping("/bet")
-    public BetDTO matchBet(@RequestBody BetDTO bet) {
-        matchService.matchBet(bet);
-        return bet;
+    public void matchBet(@RequestBody List<BetDTO> bets) {
+        for (var bet: bets) {
+            matchService.matchBet(bet);
+        }
     }
 }
