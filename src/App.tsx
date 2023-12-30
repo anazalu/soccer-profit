@@ -1,16 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
 import Grid from '@mui/material/Grid';
 import { Box, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Button, Typography, Checkbox, FormControlLabel, TextField } from '@mui/material';
 
 import './App.css';
 import MatchesContainer from './components/MatchesContainer';
-import RightPane from './components/RightPane';
+import { useState } from 'react';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-const leagueId = 1;
 
 function App() {
+
+  const [leagueId, setLeagueId] = useState('1');
+
+  const handleLeagueChange = (event: SelectChangeEvent) => {
+    setLeagueId(event.target.value as string);
+  };
+
   return (
     <Grid container spacing={3} margin={5}>
       <Grid item xs={12}>
@@ -30,7 +34,7 @@ function App() {
                 id="demo-simple-select"
                 value={leagueId}
                 label="League"
-              // onChange={handleLeagueChange}
+                onChange={handleLeagueChange}
               >
                 <MenuItem value={1}>UK League 1</MenuItem>
                 <MenuItem value={2}>UK League 2</MenuItem>
@@ -42,7 +46,7 @@ function App() {
         </Grid>
 
         <Grid item>
-          <MatchesContainer />
+          <MatchesContainer leagueId={leagueId} />
         </Grid>
 
       </Grid>

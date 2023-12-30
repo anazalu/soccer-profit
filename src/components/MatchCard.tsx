@@ -4,8 +4,10 @@ import { Box, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Butt
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 interface Match {
+    leagueId: number;
     matchId: number;
-    matchName: string;
+    teamA: string;
+    teamB: string;
 }
 
 interface MatchCardProps {
@@ -21,7 +23,7 @@ export default function MatchCard({ match }: MatchCardProps) {
                 <Grid container spacing={1} columnSpacing={1} rowSpacing={1} key={match.matchId}>
 
                     <Grid item xs={3}>
-                        <Typography variant="body1">{match.matchName}</Typography>
+                        <Typography variant="body1">{match.teamA} vs {match.teamB}</Typography>
                     </Grid>
 
                     <Grid item xs={1}>
@@ -33,8 +35,8 @@ export default function MatchCard({ match }: MatchCardProps) {
                             type="text"
                             label="Stake"
                             size="small"
-                            // value={stakeBack}
-                            // onChange={(e) => setStakeBack(~~e.target.value)}
+                            // value={stake}
+                            // onChange={(e) => setStake(~~e.target.value)}
                             InputLabelProps={{ shrink: true }}
                         />
                     </Grid>
@@ -44,8 +46,8 @@ export default function MatchCard({ match }: MatchCardProps) {
                             type="number"
                             label="Step"
                             size="small"
-                            // value={stepBack}
-                            // onChange={(e) => setStepBack(~~e.target.value)}
+                            // value={step}
+                            // onChange={(e) => setStep(~~e.target.value)}
                             InputLabelProps={{ shrink: true }}
                         />
                     </Grid>
@@ -55,8 +57,8 @@ export default function MatchCard({ match }: MatchCardProps) {
                             type="text"
                             label="Sell"
                             size="small"
-                            // value={stakeBack}
-                            // onChange={(e) => setStakeBack(~~e.target.value)}
+                            // value={sell}
+                            // onChange={(e) => setSell(~~e.target.value)}
                             InputLabelProps={{ shrink: true }}
                         />
                     </Grid>

@@ -28,12 +28,23 @@ UK vs SPA   |[X]      |10£ |11|   0.5%|23
 - teamA
 - teamB
 
+    private Long matchId;
+    private Long leagueId;
+    private String teamA;
+    private String teamB;
+
 ### Bet DTO:
 - matchId
 - stake
 - step
 - sell
 - stepFreeRoll
+
+    private Long matchId;
+    private int stake;
+    private int step;
+    private int sell;
+    private int stepFreeRoll;
 
 ### MatchService methods
 ```
