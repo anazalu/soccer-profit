@@ -21,7 +21,6 @@ UK vs SPA   |[X]      |10£ |11|   0.5%|23
 - localhost:8080/api/matches/{leagueId}
 #### POST
 - localhost:8080/api/matches/bet
--
 
 ### Match DTO:
 - matchId
