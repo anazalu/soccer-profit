@@ -16,9 +16,7 @@ export type { Match };
 
 export default function MatchCard({ match }: MatchCardProps) {
     return (
-
         <Grid container spacing={3} margin={5}>
-
             <Box margin={1} >
                 <Grid container spacing={1} columnSpacing={1} rowSpacing={1} key={match.matchId}>
 
@@ -65,7 +63,6 @@ export default function MatchCard({ match }: MatchCardProps) {
 
                 </Grid>
             </Box>
-
         </Grid>
     );
 }

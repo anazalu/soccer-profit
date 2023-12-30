@@ -16,22 +16,31 @@ UK vs SPA   |[X]      |10£ |11|   0.5%|23
 	  
 	  1x(Button BET) 1x(Clear)
 
+### Endpoints
+#### GET
+- localhost:8080/api/matches/{leagueId}
+#### POST
+- localhost:8080/api/matches/bet
+-
+
 ### Match DTO:
-- Id;
-- Name;
+- matchId
+- leagueId
+- teamA
+- teamB
 
 ### Bet DTO:
-- Stake
-- Step
-- Sell
-- SFree
+- matchId
+- stake
+- step
+- sell
+- stepFreeRoll
 
-### TradeService methods
+### MatchService methods
 ```
 List<Match> getAllMatches(leagueId);
 void placeBets(List<Bet>)
 ```
-
 
 ### Useful commands 
 `npm start`
