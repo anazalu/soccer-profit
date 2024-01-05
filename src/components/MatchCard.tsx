@@ -1,5 +1,5 @@
 import Grid from '@mui/material/Grid';
-import { Box, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Button, Typography, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { Box, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Button, Typography, Checkbox, FormControlLabel, TextField, Divider } from '@mui/material';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -8,35 +8,41 @@ interface Match {
     matchId: number;
     teamA: string;
     teamB: string;
+    stake?: number;
+    step?: number;
 }
 
 interface MatchCardProps {
     match: Match;
+    setStake: (matchId: number, stake: number) => void;
+    showStuff: boolean;
 }
 
 export type { Match };
 
-export default function MatchCard({ match }: MatchCardProps) {
+export default function MatchCard({ match, setStake, showStuff }: MatchCardProps) {
     return (
         <Grid container spacing={3} margin={5}>
             <Box margin={1} >
                 <Grid container spacing={1} columnSpacing={1} rowSpacing={1} key={match.matchId}>
 
                     <Grid item xs={3}>
-                        <Typography variant="body1">{match.teamA} vs {match.teamB}</Typography>
+                        <Typography minWidth={1500} variant="body1">{match.teamA} vs {match.teamB}</Typography>
                     </Grid>
-
-                    <Grid item xs={1}>
-                        <Checkbox {...label} />
-                    </Grid>
+                    (if (showStuff) {
+                        <Grid item xs={1}>
+                            <Checkbox {...label} />
+                        </Grid>
+                    })
 
                     <Grid item xs={1}>
                         <TextField
                             type="text"
                             label="Stake"
                             size="small"
-                            // value={stake}
-                            // onChange={(e) => setStake(~~e.target.value)}
+                            // defaultValue={1}
+                            value={match.stake}
+                            onChange={(e) => setStake(match.matchId, ~~e.target.value)}
                             InputLabelProps={{ shrink: true }}
                         />
                     </Grid>
@@ -66,6 +72,8 @@ export default function MatchCard({ match }: MatchCardProps) {
                     <Grid item xs={1}>
 
                         <TextField
+                            type="number"
+
                             id="outlined-basic" label="SFree" variant="outlined" size="small"
                             // value={stepFreeRoll}
                             // onChange={(e) => setStepFreeRoll(~~e.target.value)}                            
@@ -74,6 +82,7 @@ export default function MatchCard({ match }: MatchCardProps) {
                     </Grid>
 
                 </Grid>
+                <Divider light />
             </Box>
         </Grid>
     );

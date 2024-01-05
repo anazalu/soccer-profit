@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { Box, Button, Grid, Stack, TextField } from "@mui/material";
+import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import MatchCard, { Match } from "./MatchCard";
 
 interface MatchesContainerProps {
@@ -16,14 +17,21 @@ function MatchesContainer({ leagueId }: MatchesContainerProps) {
         }
     );
 
+    const [listOfStakes, setListOfStakes] = useState({});
+    const handleSetStake = (matchId: number, stake: number) => {
+        setListOfStakes({ ...listOfStakes, [matchId]: stake });
+        console.log(listOfStakes);
+    }
+
+    const [defaultStake, setDefaultStake] = useState(1);
+    const handleSetDefaultStake = (_: number, stake: number) => {
+        setDefaultStake(stake);
+        console.log('Set default stakes to:', stake);
+    }
+
     const handleClearAll = () => {
         console.log("Clear all.");
     };
-
-    const setStake = () => {
-        console.log("Stake.");
-    };
-
 
     if (isLoading) {
         return <div>Is loading...</div>;
@@ -36,31 +44,16 @@ function MatchesContainer({ leagueId }: MatchesContainerProps) {
     return (
         <Grid container spacing={3} margin={5} columns={12}>
             <Grid item xs={8}>
-                <Box sx={{ width: 500 }}>
-                    <Stack spacing={{ xs: 1, sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
-
-                        <TextField
-                            type="text"
-                            label="Default Stake"
-                            size="small"
-                            // value={stake}
-                            // onChange={(e) => setStake(~~e.target.value)}
-                            InputLabelProps={{ shrink: true }}
-                        />
-
-                        <Stack direction="row" >
-                            <Button variant="contained" onClick={() => { setStake() }}>1</Button>
-                            <Button variant="contained" onClick={() => { setStake() }}>2</Button>
-                            <Button variant="contained" onClick={() => { setStake() }}>5</Button>
-                            <Button variant="contained" onClick={() => { setStake() }}>10</Button>
-                            <Button onClick={handleClearAll}>Clear all</Button>
+                <Box sx={{ width: 1500 }}>
+                        <Stack alignContent={'right'}>
+                            <Button onClick={handleClearAll}>Clear all fields</Button>
                         </Stack>
-                    </Stack>
                 </Box>
 
+                <MatchCard match={{ leagueId: 0, matchId: 0, teamA: 'Default values', teamB: '', stake: defaultStake }} setStake={handleSetDefaultStake} showStuff={true} />
                 {
                     data?.map((match: Match) => (
-                        <MatchCard key={match.matchId} match={match} />
+                        <MatchCard key={match.matchId} match={match} setStake={handleSetStake} showStuff={false} />
                     ))
                 }
             </Grid>
