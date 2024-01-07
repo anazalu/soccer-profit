@@ -33,12 +33,13 @@ function MatchesContainer({ leagueId }: MatchesContainerProps) {
         }
     );
 
-    // const betMutation = useMutation((bets: BetDTO[]) =>
-    //     axios.post(`http://localhost:8080/api/matches/bet`, bets).then((response) => {
-    //         console.log(response);
-    //         // queryClient.invalidateQueries(['horses' + bet.raceId]);
-    //     })
-    // );
+    const betMutation = useMutation({
+        mutationFn: (bets: BetDTO[]) => axios.post(`http://localhost:8080/api/matches/bet`, bets)
+            .then((response) => {
+                console.log(response);
+                // queryClient.invalidateQueries({queryKey: ['matches' + leagueId]});
+            })
+    });
 
     const [matches, setMatches] = useState<{ [key: number]: Match }>({});
 
@@ -78,9 +79,9 @@ function MatchesContainer({ leagueId }: MatchesContainerProps) {
                 bets.push(bet);
             }
         })
-        console.log(...bets);
+        // console.log(...bets);
 
-        // betMutation.mutate(bets);
+        betMutation.mutate(bets);
     }
 
     const [defaultStake, setDefaultStake] = useState(5);
@@ -159,7 +160,7 @@ function MatchesContainer({ leagueId }: MatchesContainerProps) {
     }
 
     return (
-        <Grid container spacing={3} margin={5} columns={12}>
+        <Grid container >
             <Grid item xs={8}>
                 <Box sx={{ width: 1500 }}>
                     <Stack alignContent={'right'}>
