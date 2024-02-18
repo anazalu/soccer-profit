@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [SeleniumTestSuite]" guice-stage="DEVELOPMENT" verbose="0">
+  <test thread-count="5" name="ReactAppTest(failed)" verbose="0">
+    <classes>
+      <class name="com.example.ReactAppSeleniumTest">
+        <methods>
+          <include name="testDropdownSelect"/>
+          <include name="setUp"/>
+          <include name="testSecondParaText2"/>
+          <include name="testSecondParaText"/>
+          <include name="tearDown"/>
+        </methods>
+      </class> <!-- com.example.ReactAppSeleniumTest -->
+    </classes>
+  </test> <!-- ReactAppTest(failed) -->
+</suite> <!-- Failed suite [SeleniumTestSuite] -->

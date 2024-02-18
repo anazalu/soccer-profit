@@ -42,12 +42,13 @@ export default function MatchCard({ match, showStuff, onCheck, setStake, setStep
 
                 <Grid item xs={1}>
                     {showStuff && (
-                        <Checkbox {...label} checked={match.isChecked} onChange={(e) => onCheck(match.matchId, e.target.checked)} />
+                        <Checkbox {...label} id="box" checked={match.isChecked} onChange={(e) => onCheck(match.matchId, e.target.checked)} />
                     )}
                 </Grid>
 
                 <Grid item xs={1}>
                     <TextField
+                        id="stake"
                         type="text"
                         label="Stake"
                         size="small"
