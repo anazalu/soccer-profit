@@ -62,7 +62,7 @@ export default function MatchCard({ match, showStuff, onCheck, setStake, setStep
                 <Grid item xs={1}>
                     <TextField
                         // https://mui.com/base-ui/react-number-input/
-                        type="number"
+                        type="text"
                         label="Step"
                         size="small"
                         variant={showStuff ? undefined : "filled"}
@@ -86,7 +86,7 @@ export default function MatchCard({ match, showStuff, onCheck, setStake, setStep
 
                 <Grid item xs={1}>
                     <TextField
-                        type="number"
+                        type="text"
                         label="SFree"
                         size="small"
                         variant={showStuff ? undefined : "filled"}

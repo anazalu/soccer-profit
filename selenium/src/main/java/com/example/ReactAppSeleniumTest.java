@@ -1,6 +1,7 @@
 package com.example;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -33,7 +34,7 @@ public class ReactAppSeleniumTest {
     @Test
     public void testSecondParaText() {
         WebElement secondParaElement = driver.findElements(By.className("MuiTypography-body1")).get(1);
-        String actualParagraphText = secondParaElement.getText();
+        String actualParagraphText = secondParaElement.getText().replace("*", "");
         String expectedParagraphText = "TeamA1 vs TeamB1";
         Assert.assertEquals(actualParagraphText, expectedParagraphText, "Paragraph text mismatch");
     }
@@ -42,9 +43,10 @@ public class ReactAppSeleniumTest {
     public void testSecondParaText2() {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         WebElement secondParaElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("(//p[@class='MuiTypography-root MuiTypography-body1 css-o0xjlm-MuiTypography-root'])[2]")));
+                By.xpath("(//p[contains(@class, 'MuiTypography-body1')])[2]")));
+
         // Assert.assertTrue(secondParaElement.isDisplayed());
-        String actualParagraphText = secondParaElement.getText();
+        String actualParagraphText = secondParaElement.getText().replace("*", "");
         String expectedParagraphText = "TeamA1 vs TeamB1";
         Assert.assertEquals(actualParagraphText, expectedParagraphText, "Paragraph text mismatch");
     }
@@ -88,7 +90,7 @@ public class ReactAppSeleniumTest {
         optionElement.click();
         secondParaElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("(//p[contains(@class, 'MuiTypography-body1')])[2]")));
-        actualParagraphText = secondParaElement.getText();
+        actualParagraphText = secondParaElement.getText().replace("*", "");
         expectedParagraphText = "TeamA1 vs TeamB1";
         Assert.assertEquals(actualParagraphText, expectedParagraphText, "Paragraph text mismatch");
     }
@@ -116,54 +118,88 @@ public class ReactAppSeleniumTest {
         Assert.assertEquals(changedStake, defaultStake, "Values mismatch");
     }
 
-    /*
-     * @Test
-     * public void testCheckBoxStep() {
-     * WebDriverWait wait = new WebDriverWait(driver, 2);
-     * // Retrieve default step value
-     * WebElement defaultStepElement =
-     * wait.until(ExpectedConditions.visibilityOfElementLocated(
-     * By.xpath("(//input[@id=':r5:'])[1]")));
-     * String initialDefaultStep = defaultStepElement.getAttribute("value");
-     * System.out.println("initialDefaultStep:" + initialDefaultStep);
-     * 
-     * // Increase default step value by 1
-     * int changedDefaultStepInt = Integer.parseInt(initialDefaultStep) + 1;
-     * System.out.println("changedDefaultStepInt:" + changedDefaultStepInt);
-     * String changedDefaultStep = String.valueOf(changedDefaultStepInt);
-     * System.out.println("changedDefaultStep:" + changedDefaultStep);
-     * 
-     * defaultStepElement.clear();
-     * 
-     * wait.until(ExpectedConditions.textToBePresentInElementValue(
-     * By.xpath("(//input[@id=':r5:'])[1]"), ""));
-     * 
-     * System.out.println("defaultStepElement after Clear:" +
-     * defaultStepElement.getAttribute("value"));
-     * 
-     * defaultStepElement.sendKeys(changedDefaultStep);
-     * 
-     * wait.until(ExpectedConditions.attributeToBe(
-     * By.xpath("(//input[@id=':r5:'])[1]"), "value", changedDefaultStep));
-     * 
-     * System.out.println("defaultStepElement after sendKeys:" +
-     * defaultStepElement.getAttribute("value"));
-     * 
-     * // Tick the checkbox of 1st match
-     * WebElement checkBoxElement =
-     * wait.until(ExpectedConditions.presenceOfElementLocated(
-     * By.xpath("(//input[@id='box'])[1]")));
-     * checkBoxElement.click();
-     * 
-     * // Verify that 1st match step = default step
-     * WebElement matchStepElement =
-     * wait.until(ExpectedConditions.visibilityOfElementLocated(
-     * By.xpath("(//input[@id=':rd:'])[1]")));
-     * String changedMatchStep = matchStepElement.getAttribute("value");
-     * Assert.assertEquals(changedMatchStep, changedDefaultStep,
-     * "Values of default amnd 1st match step mismatch");
-     * }
-     */
+    @Test
+    public void testCheckBoxStep() {
+        WebDriverWait wait = new WebDriverWait(driver, 2);
+
+        // retrieve default step value
+        WebElement defaultStepElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("(//input[@id=':r5:'])[1]")));
+        String initialDefaultStep = defaultStepElement.getAttribute("value");
+
+        // increase default step value by 1
+        int changedDefaultStepInt = Integer.parseInt(initialDefaultStep) + 1;
+        String changedDefaultStep = String.valueOf(changedDefaultStepInt);
+
+        // defaultStepElement.clear();
+        defaultStepElement.sendKeys(Keys.BACK_SPACE);
+
+        wait.until(ExpectedConditions.attributeToBe(
+                By.xpath("(//input[@id=':r5:'])[1]"), "value", "0"));
+
+        defaultStepElement.sendKeys(changedDefaultStep);
+
+        wait.until(ExpectedConditions.attributeToBe(
+                By.xpath("(//input[@id=':r5:'])[1]"), "value", changedDefaultStep));
+
+        // tick the checkbox of 1st match
+        WebElement checkBoxElement = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("(//input[@id='box'])[1]")));
+        checkBoxElement.click();
+
+        // verify that 1st match step = default step
+        WebElement matchStepElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("(//input[@id=':rd:'])[1]")));
+        String changedMatchStep = matchStepElement.getAttribute("value");
+        Assert.assertEquals(changedMatchStep, changedDefaultStep,
+                "Values of default and 1st match step mismatch");
+    }
+
+    @Test
+    public void testBetButton() {
+        WebDriverWait wait = new WebDriverWait(driver, 2);
+
+        // count asterisks in the name of 1st match
+        WebElement firstMatchElement = driver.findElements(By.className("MuiTypography-body1")).get(1);
+        String firstMatchInitialText = firstMatchElement.getText();
+
+        int initialStars = 0;
+        for (char ch : firstMatchInitialText.toCharArray()) {
+            if (ch == '*') {
+                initialStars++;
+            }
+        }
+
+        // tick the checkbox of 1st match
+        WebElement checkBoxElement = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.xpath("(//input[@id='box'])[1]")));
+        checkBoxElement.click();
+
+        // click the Bet button
+        WebElement buttonElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//button)[2]")));
+        buttonElement.click();
+
+        // press f5
+        driver.navigate().refresh();
+
+        // count asterisks in the name of 1st match
+        firstMatchElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("(//p[contains(@class, 'MuiTypography-body1')])[2]")));
+
+        String firstMatchFinalText = firstMatchElement.getText();
+
+        int finalStars = 0;
+        for (char ch : firstMatchFinalText.toCharArray()) {
+            if (ch == '*') {
+                finalStars++;
+            }
+        }
+
+        // verify that 1st match contains an additional asterisk
+        Assert.assertEquals(finalStars, initialStars + 1,
+                "Asterisk dysfunction");
+    }
+
     @AfterClass
     public void tearDown() {
         if (driver != null) {

@@ -160,11 +160,11 @@ function MatchesContainer({ leagueId }: MatchesContainerProps) {
     }
 
     return (
-        <Grid container >a
+        <Grid container >
             <Grid item xs={8}>
                 <Box sx={{ width: 1500 }}>
                     <Stack alignContent={'right'}>
-                        <Button onClick={handleClearAll}>Clear all fields / Clear default fields...</Button>
+                        <Button onClick={handleClearAll}>Clear all fields [This button does nothing at this stage]</Button>
                     </Stack>
                 </Box>
 
