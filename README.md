@@ -80,6 +80,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 #### Installation
 
+
 Selenium uses WebDriver (ChromeDriver) to control the browser:
 
 ```
@@ -94,6 +95,21 @@ Use Maven to create a simple Maven project in a subdirectory. The project will i
 
 ```
 pom.xml -> testng.xml -> ReactAppSeleniumTest.java
+```
+
+#### Using Selenium on MacOS
+
+```
+VS Code + Extension Pack for Java, Maven for Java
+JDK
+Maven
+    add to $PATH
+Java: Create Java Project > Maven > maven-archetype-quickstart
+Edit pom.xml
+    dependencies - Selenium; TestNG
+    plugins - ...
+Check Chrome version, download chromedriver accordingly
+    save in /usr/local/bin
 ```
 
 #### The test

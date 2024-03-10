@@ -15,6 +15,9 @@ import org.testng.annotations.Test;
 
 public class ReactAppSeleniumTest {
     private WebDriver driver;
+    private By firstMatchBy = By.xpath("(//p[contains(@class, 'MuiTypography-body1')])[2]");
+    private By selectLeagueBy = By.id("demo-simple-select");
+    private By firstMatchCheckBoxBy = By.xpath("(//input[@id='box'])[1]");
 
     @BeforeClass
     public void setUp() {
@@ -33,7 +36,7 @@ public class ReactAppSeleniumTest {
 
     @Test
     public void testSecondParaText() {
-        WebElement secondParaElement = driver.findElements(By.className("MuiTypography-body1")).get(1);
+        WebElement secondParaElement = driver.findElement(firstMatchBy);
         String actualParagraphText = secondParaElement.getText().replace("*", "");
         String expectedParagraphText = "TeamA1 vs TeamB1";
         Assert.assertEquals(actualParagraphText, expectedParagraphText, "Paragraph text mismatch");
@@ -42,8 +45,7 @@ public class ReactAppSeleniumTest {
     @Test
     public void testSecondParaText2() {
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        WebElement secondParaElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("(//p[contains(@class, 'MuiTypography-body1')])[2]")));
+        WebElement secondParaElement = wait.until(ExpectedConditions.visibilityOfElementLocated(firstMatchBy));
 
         // Assert.assertTrue(secondParaElement.isDisplayed());
         String actualParagraphText = secondParaElement.getText().replace("*", "");
@@ -64,8 +66,7 @@ public class ReactAppSeleniumTest {
     @Test
     public void testDropdown() {
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        WebElement dropdownElement = wait
-                .until(ExpectedConditions.visibilityOfElementLocated(By.id("demo-simple-select")));
+        WebElement dropdownElement = wait.until(ExpectedConditions.visibilityOfElementLocated(selectLeagueBy));
         // Assert.assertTrue(dropdownElement.isDisplayed());
         String actualDrodownText = dropdownElement.getText();
         String expectedDropdownText = "UK League 1";
@@ -75,21 +76,18 @@ public class ReactAppSeleniumTest {
     @Test
     public void testDropdownSelect() {
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        WebElement dropdownElement = wait
-                .until(ExpectedConditions.visibilityOfElementLocated(By.id("demo-simple-select")));
+        WebElement dropdownElement = wait.until(ExpectedConditions.visibilityOfElementLocated(selectLeagueBy));
         dropdownElement.click();
         WebElement optionElement = driver.findElement(By.xpath("//li[text()='UK League 2']"));
         optionElement.click();
-        WebElement secondParaElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("(//p[contains(@class, 'MuiTypography-body1')])[2]")));
+        WebElement secondParaElement = wait.until(ExpectedConditions.visibilityOfElementLocated(firstMatchBy));
         String actualParagraphText = secondParaElement.getText();
         String expectedParagraphText = "TeamA11 vs TeamB11";
         Assert.assertEquals(actualParagraphText, expectedParagraphText, "Paragraph text mismatch");
         dropdownElement.click();
         optionElement = driver.findElement(By.xpath("//li[text()='UK League 1']"));
         optionElement.click();
-        secondParaElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("(//p[contains(@class, 'MuiTypography-body1')])[2]")));
+        secondParaElement = wait.until(ExpectedConditions.visibilityOfElementLocated(firstMatchBy));
         actualParagraphText = secondParaElement.getText().replace("*", "");
         expectedParagraphText = "TeamA1 vs TeamB1";
         Assert.assertEquals(actualParagraphText, expectedParagraphText, "Paragraph text mismatch");
@@ -108,8 +106,7 @@ public class ReactAppSeleniumTest {
         String initialStake = initialStakeElement.getAttribute("value");
         Assert.assertEquals(initialStake, "0", "Values mismatch");
         // Tick the checkbox of 1st match
-        WebElement checkBoxElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("(//input[@id='box'])[1]")));
+        WebElement checkBoxElement = wait.until(ExpectedConditions.presenceOfElementLocated(firstMatchCheckBoxBy));
         checkBoxElement.click();
         // Verify that 1st match stake = default stake
         WebElement changedStakeElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -143,8 +140,7 @@ public class ReactAppSeleniumTest {
                 By.xpath("(//input[@id=':r5:'])[1]"), "value", changedDefaultStep));
 
         // tick the checkbox of 1st match
-        WebElement checkBoxElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("(//input[@id='box'])[1]")));
+        WebElement checkBoxElement = wait.until(ExpectedConditions.presenceOfElementLocated(firstMatchCheckBoxBy));
         checkBoxElement.click();
 
         // verify that 1st match step = default step
@@ -160,7 +156,7 @@ public class ReactAppSeleniumTest {
         WebDriverWait wait = new WebDriverWait(driver, 2);
 
         // count asterisks in the name of 1st match
-        WebElement firstMatchElement = driver.findElements(By.className("MuiTypography-body1")).get(1);
+        WebElement firstMatchElement = driver.findElement(firstMatchBy);
         String firstMatchInitialText = firstMatchElement.getText();
 
         int initialStars = 0;
@@ -171,8 +167,7 @@ public class ReactAppSeleniumTest {
         }
 
         // tick the checkbox of 1st match
-        WebElement checkBoxElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("(//input[@id='box'])[1]")));
+        WebElement checkBoxElement = wait.until(ExpectedConditions.presenceOfElementLocated(firstMatchCheckBoxBy));
         checkBoxElement.click();
 
         // click the Bet button
@@ -183,8 +178,7 @@ public class ReactAppSeleniumTest {
         driver.navigate().refresh();
 
         // count asterisks in the name of 1st match
-        firstMatchElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("(//p[contains(@class, 'MuiTypography-body1')])[2]")));
+        firstMatchElement = wait.until(ExpectedConditions.visibilityOfElementLocated(firstMatchBy));
 
         String firstMatchFinalText = firstMatchElement.getText();
 
