@@ -1,5 +1,4 @@
 ## Todo
-![image](image_2023_12_23.png)
 
 Country:
 [UK][UKid=1, ITAid=2]
@@ -74,7 +73,7 @@ void placeBets(List<Bet>)
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-![image](image_231230.png)
+![image](image240427.png)
 
 ### Writing Selenium tests in Java
 
