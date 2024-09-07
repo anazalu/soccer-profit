@@ -10,4 +10,3 @@ public class BetDTO {
     private int sell;
     private int stepFreeRoll;
 }
- 
