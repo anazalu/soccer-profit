@@ -1,5 +1,6 @@
 package com.soccerprofit.backend;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,16 +23,29 @@ class MatchControllerTest {
 	private MatchRepository matchRepository;
 
 	private String baseUrl = "http://localhost:8080/api/matches/";
+	private Long leagueOneId;
+	private Long matchOneLeagueOne;
+	private String teamAfromMatchOneLeagueOne;
 
-	// private Long leagueOneId = matchRepository.findAll().get(0).getLeagueId();
-	// private Long matchOneLeagueOne = matchRepository.findAllByLeagueId(leagueOneId).get(0).getMatchId();
-	
+	@BeforeEach
+	void setUp() {
+		if (matchRepository.findAll().isEmpty()) {
+			for (long i = 1; i <= 30; i++) {
+				long leagueId = (i - 1) / 10 + 1;
+				String teamA = "TeamA" + i;
+				String teamB = "TeamB" + i;
+				Match match = new Match(leagueId, teamA, teamB);
+				matchRepository.save(match);
+			}
+		}
+
+		leagueOneId = matchRepository.findAll().get(0).getLeagueId();
+		matchOneLeagueOne = matchRepository.findAllByLeagueId(leagueOneId).get(0).getMatchId();
+		teamAfromMatchOneLeagueOne = matchRepository.findAllByLeagueId(leagueOneId).get(0).getTeamA();
+	}
+
 	@Test
 	void getMatchesByLeagueId() throws Exception {
-
-		Long leagueOneId = matchRepository.findAll().get(0).getLeagueId();
-		Long matchOneLeagueOne = matchRepository.findAllByLeagueId(leagueOneId).get(0).getMatchId();
-		String teamAfromMatchOneLeagueOne = matchRepository.findAllByLeagueId(leagueOneId).get(0).getTeamA();
 
 		mockMvc.perform(get(baseUrl + leagueOneId))
 			.andExpect(status().isOk())
@@ -41,12 +55,45 @@ class MatchControllerTest {
 			.andExpect(jsonPath("$[0].matchId").value(Long.toString(matchOneLeagueOne)))
 			.andExpect(jsonPath("$[0].teamA").value(teamAfromMatchOneLeagueOne));
 	}
+	
+	@Test
+	void getMatchesByLeagueIdNegative() throws Exception {
+
+		mockMvc.perform(get(baseUrl + "0"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$").isEmpty())
+			.andExpect(jsonPath("$.length()").value(0))
+			;
+	}
+	
+	@Test
+	void getMatchesWithoutLeagueIdNegative() throws Exception {
+
+		mockMvc.perform(get(baseUrl))
+			.andExpect(status().isNotFound())
+			;
+	}
+
+	@Test
+	void postMatchesNegative() throws Exception {
+
+		mockMvc.perform(post(baseUrl + leagueOneId)		
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(""))
+				.andExpect(status().is(405))
+			;
+	}
+	
+	@Test
+	void deleteMatchesNegative() throws Exception {
+
+		mockMvc.perform(delete(baseUrl + leagueOneId))
+			.andExpect(status().is(405))
+			;
+	}
 
 	@Test
 	void postBet() throws Exception {
-		Long leagueOneId = matchRepository.findAll().get(0).getLeagueId();
-		Long matchOneLeagueOne = matchRepository.findAllByLeagueId(leagueOneId).get(0).getMatchId();
-		String teamAbeforeBet = matchRepository.findAllByLeagueId(leagueOneId).get(0).getTeamA();
 
 		String betJson = "[{\"matchId\":" + matchOneLeagueOne + ",\"stake\":1,\"step\":1,\"sell\":1,\"stepFreeRoll\":1}]";
 
@@ -58,6 +105,6 @@ class MatchControllerTest {
 
 		String teamAafterBet = matchRepository.findAllByLeagueId(leagueOneId).get(0).getTeamA();
 		
-		assertEquals(teamAafterBet, teamAbeforeBet + "*");
+		assertEquals(teamAafterBet, teamAfromMatchOneLeagueOne + "*");
 	}		
 }
