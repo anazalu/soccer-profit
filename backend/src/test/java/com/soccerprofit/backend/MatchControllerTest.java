@@ -29,14 +29,14 @@ class MatchControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		if (matchRepository.findAll().isEmpty()) {
-			for (long i = 1; i <= 30; i++) {
-				long leagueId = (i - 1) / 10 + 1;
-				String teamA = "TeamA" + i;
-				String teamB = "TeamB" + i;
-				Match match = new Match(leagueId, teamA, teamB);
-				matchRepository.save(match);
-			}
+		matchRepository.deleteAll();
+
+		for (long i = 1; i <= 30; i++) {
+			long leagueId = (i - 1) / 10 + 1;
+			String teamA = "TeamA" + i;
+			String teamB = "TeamB" + i;
+			Match match = new Match(leagueId, teamA, teamB);
+			matchRepository.save(match);
 		}
 
 		leagueOneId = matchRepository.findAll().get(0).getLeagueId();
@@ -106,5 +106,61 @@ class MatchControllerTest {
 		String teamAafterBet = matchRepository.findAllByLeagueId(leagueOneId).get(0).getTeamA();
 		
 		assertEquals(teamAafterBet, teamAfromMatchOneLeagueOne + "*");
-	}		
+	}
+
+	@Test
+	void postTwoMatchesBet() throws Exception {
+		final int MATCH_THREE_ID = 2;
+
+		Long matchThreeLeagueOne = matchRepository.findAllByLeagueId(leagueOneId).get(MATCH_THREE_ID).getMatchId();
+		String teamAfromMatchThreeLeagueOne = matchRepository.findAllByLeagueId(leagueOneId).get(MATCH_THREE_ID).getTeamA();
+
+		String betJson = "[{\"matchId\":" + matchOneLeagueOne + ",\"stake\":1,\"step\":1,\"sell\":1,\"stepFreeRoll\":1},"+
+		                  "{\"matchId\":" + matchThreeLeagueOne + ",\"stake\":1,\"step\":1,\"sell\":1,\"stepFreeRoll\":1}]";
+
+		mockMvc.perform(post(baseUrl + "bet")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(betJson))
+				.andExpect(status().isOk())
+			;
+
+		String teamAMatchOneAfterBet = matchRepository.findAllByLeagueId(leagueOneId).get(0).getTeamA();
+		String teamAMatchThreeAfterBet = matchRepository.findAllByLeagueId(leagueOneId).get(MATCH_THREE_ID).getTeamA();
+		
+		assertEquals(teamAMatchOneAfterBet, teamAfromMatchOneLeagueOne + "*");
+		assertEquals(teamAMatchThreeAfterBet, teamAfromMatchThreeLeagueOne + "*");
+	}
+	
+	@Test
+	void getBetNegative() throws Exception {
+
+		mockMvc.perform(get(baseUrl + "bet"))
+				.andExpect(status().isBadRequest())
+			;
+	}
+
+	@Test
+	void postBetEmptyBodyNegative() throws Exception {
+
+		String betJson = "";
+
+		mockMvc.perform(post(baseUrl + "bet")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(betJson))
+				.andExpect(status().isBadRequest())
+			;
+
+	}
+
+	@Test
+	void postBetWrongEndpointNegative() throws Exception {
+
+		String betJson = "[{\"matchId\":" + matchOneLeagueOne + ",\"stake\":1,\"step\":1,\"sell\":1,\"stepFreeRoll\":1}]";
+
+		mockMvc.perform(post(baseUrl + "wrongEndpoint")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(betJson))
+				.andExpect(status().is(405))
+			;
+	}
 }
